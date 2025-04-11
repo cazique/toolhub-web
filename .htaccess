@@ -1,0 +1,86 @@
+# Archivo .htaccess para mejorar seguridad de ToolHub Web
+
+# Habilitar motor de reescritura
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Forzar HTTPS (descomentae en producción)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
+    # Proteger archivos y directorios sensibles
+    RewriteRule ^config\.php$ - [F]
+    RewriteRule ^logs/.* - [F]
+    RewriteRule ^tests/.* - [F]
+    RewriteRule ^\.git/.* - [F]
+</IfModule>
+
+# Prevenir acceso al directorio
+Options -Indexes
+
+# Proteger archivos específicos
+<FilesMatch "^(\.htaccess|\.gitignore|composer\.json|README\.md)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Protección contra XSS
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    
+    # Protección contra clickjacking
+    Header set X-Frame-Options "SAMEORIGIN"
+    
+    # Protección contra MIME sniffing
+    Header set X-Content-Type-Options "nosniff"
+    
+    # Política de seguridad de contenido (CSP) básica
+    # Descomentae y ajustae en producción
+    # Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' https://maps.google.com data:; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self'"
+    
+    # Política de referencia
+    Header set Referrer-Policy "same-origin"
+</IfModule>
+
+# Configurar las cabeceras PHP
+<IfModule mod_php.ini>
+    # Deshabilitar exposición de versión PHP
+    php_flag expose_php Off
+    
+    # Deshabilitar funciones peligrosas (descomentae en producción según necesidades)
+    # php_value disable_functions exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source
+    
+    # Limitar el tiempo de ejecución
+    php_value max_execution_time 30
+    
+    # Limitar tamaño máximo de subida de archivos
+    php_value upload_max_filesize 2M
+    php_value post_max_size 8M
+    
+    # Configurar zona horaria
+    php_value date.timezone 'Europe/Madrid'
+</IfModule>
+
+# Comprimir archivos para mejor rendimiento
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json
+</IfModule>
+
+# Caché en el navegador para recursos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresDefault "access plus 1 week"
+</IfModule>
+
+# Mensaje de error personalizado
+ErrorDocument 403 /index.php
+ErrorDocument 404 /index.php
