@@ -1,0 +1,75 @@
+/* Estilos personalizados para ToolHub Web */
+
+body {
+  background-color: #f8f9fa;
+  color: #343a40;
+}
+
+h1, h2, h3, .card-title {
+  font-weight: 600;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+/* Estilos para las tarjetas de herramientas */
+.tool-card {
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  height: 100%;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tool-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para el pre (resultados en formato de código) */
+pre {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Botón para copiar */
+.copy-btn {
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Mejora visual para switches de DNS */
+.form-check.form-switch {
+  padding-left: 2.5em;
+}
+
+/* Mejora visual para tablas */
+.table {
+  font-size: 0.95rem;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Para pantallas pequeñas */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  pre {
+    font-size: 0.8rem;
+  }
+}
