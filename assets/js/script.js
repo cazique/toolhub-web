@@ -198,3 +198,26 @@ function checkInternetConnection(callback) {
   xhr.open('HEAD', 'https://www.cloudflare.com/cdn-cgi/trace?' + randomNum, true);
   xhr.send();
 }
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('darkModeToggle');
+    const htmlElement = document.documentElement;
+
+    // Establecer el estado inicial basado en localStorage
+    const darkMode = localStorage.getItem('darkMode');
+    if (darkMode === 'enabled') {
+        htmlElement.setAttribute('data-bs-theme', 'dark');
+        toggle.checked = true;
+    }
+
+    // Manejar el cambio en el interruptor
+    toggle.addEventListener('change', () => {
+        if (toggle.checked) {
+            htmlElement.setAttribute('data-bs-theme', 'dark');
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            htmlElement.setAttribute('data-bs-theme', 'light');
+            localStorage.setItem('darkMode', 'disabled');
+        }
+    });
+});
+
